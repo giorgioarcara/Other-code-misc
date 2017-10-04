@@ -1,0 +1,5 @@
+
+
+This is an example, change path at your convenienca
+
+scp -r meg@192.168.153.60:/exportctfmeg/data/meg/ACQ_Data/20170718 /home/neuroimaging/Desktop/test

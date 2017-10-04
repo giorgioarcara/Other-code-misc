@@ -1,0 +1,91 @@
+# This is an utility script for MEGlab San Camillo.
+# It receives as input a list of ids and an export folder. It copies from a search folder (and subfolders)
+# all folders containing in the name the id to the export folder.
+# 
+# Author: Giorgio Arcara
+
+###############
+# INPUT #######
+###############
+# This script expect two things
+# The ID Name (just the initial letters)
+# The PROject name (i.e., the folder in which the data will be exported
+
+
+IDS=("NP")
+PROJECT_FOLDERS=("NOPOSA")
+
+
+######################################
+# MEG LAB Parameters (don't modify) ##
+######################################
+EXPORT_FOLDER='/DATA/NFS_DATI_ORIG/VServer22/MEG/'
+# the export_folder contains a folder for each project
+
+SEARCH_FOLDER="/DATA/NFS_DATI_ORIG/VServer22/MEG/ACQ_Data"
+# the search folder contains all the data
+
+search_id="$ID*"
+
+#######################
+# SCRIPT
+###################################################################
+
+# loop over ID and Project folders
+
+for ((k = 0; k < ${#PROJECT_FOLDERS[@]}; k++))
+do
+
+ID=${IDS[$k]}
+PROJECT_FOLDER=${PROJECT_FOLDERS[$k]}
+
+
+############
+# FIND FILES AND STORE IN AN ARRAY
+################
+File_array=()
+while IFS=  read -r -d $'\0'; do
+    File_array+=("$REPLY")
+done < <(find $SEARCH_FOLDER -maxdepth 2 -name $search_id -print0)
+
+# to check a specific element of the created array use the code below
+ echo ${File_array[3]}
+
+ALLIDs=()
+for ((i = 0; i < ${#File_array[@]}; i++))
+do
+	s=${File_array[$i]}
+	l=${s##*/} # take everything before "/"
+	w=${l%%_*} # take everything before "_"
+	ALLIDs[$i]="$w"
+done
+
+ID_LIST=($(printf "%s\n" "${ALLIDs[@]}" | sort -u))
+# hacky, taken from here
+# https://superuser.com/questions/513149/how-can-i-get-the-unique-items-in-a-bash-list
+# create a list with unique value
+
+# loop over elements in ID_LIST
+for id in ${ID_LIST[@]}; 
+do 	
+# create a string with "*" to search files containing the ID
+search_id="$id*"
+# create folder if not exists
+mkdir -p "$EXPORT_FOLDER/$PROJECT_FOLDER/$id"
+mkdir -p "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/MEG_ORIG"
+mkdir -p "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/fidpics"
+mkdir -p "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/MRI_ORIG"
+mkdir -p "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/MRI_FS"
+
+# loop over file names in the SEARCH_FOLDER
+for f in $(find $SEARCH_FOLDER -maxdepth 2 -name $search_id);
+# create folder
+do cp -rfi $f "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/MEG_ORIG"
+echo $f
+done #close loop over files (of an ID)
+done # close loop over ID list
+done # close loop over project folders
+
+
+
+

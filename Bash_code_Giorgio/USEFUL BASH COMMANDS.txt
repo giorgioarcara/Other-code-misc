@@ -1,0 +1,4 @@
+# open a connection to 22
+
+ssh -X neuroimaging@192.168.153.22
+# insert password after

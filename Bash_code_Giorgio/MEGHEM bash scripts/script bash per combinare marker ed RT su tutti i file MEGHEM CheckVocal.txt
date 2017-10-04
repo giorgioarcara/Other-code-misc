@@ -1,0 +1,31 @@
+cd /Users/giorgioarcara/Desktop/MEG/MEGHEM/'MEGHEM_step 2 checkvocal'
+
+
+# ciclo in tutte le folder presenti (il */ è per indicare di ciclare per folders)
+
+for d in */ ; do
+    echo "$d"
+
+	# copio i files nella directory
+    cp /Users/giorgioarcara/Desktop/MEG/MEGHEM/'MEGHEM bash scripts'/MEGHEM_events_bst_run1.command $d  
+	cp /Users/giorgioarcara/Desktop/MEG/MEGHEM/'MEGHEM bash scripts'/MEGHEM_events_bst_run2.command $d  
+	cp /Users/giorgioarcara/Desktop/MEG/MEGHEM/'MEGHEM bash scripts'/MEGHEM_events_bst_run3.command $d  
+	
+	# mi sposto nella directory
+	cd $d
+	
+	# eseguo i tre files
+	bash MEGHEM_events_bst_run1.command 
+	bash MEGHEM_events_bst_run2.command 
+	bash MEGHEM_events_bst_run3.command 
+	
+	# cancello i tre files
+	
+	rm MEGHEM_events_bst_run1.command 
+	rm MEGHEM_events_bst_run2.command 
+	rm MEGHEM_events_bst_run3.command 
+	
+	# mi risposto indietro nella cartella che contiene tutte le cartelle
+	cd ..
+    
+done

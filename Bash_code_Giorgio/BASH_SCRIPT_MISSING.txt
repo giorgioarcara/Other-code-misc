@@ -1,0 +1,34 @@
+# This is an utility script for MEGlab San Camillo.
+# It receives as input a list of ids and an export folder. It copies from a search folder (and subfolders)
+# all folders containing in the name the id to the export folder.
+# 
+# Author: Giorgio Arcara
+
+###############
+# INPUT #######
+###############
+# This script expect two things
+# The ID Name (just the initial letters)
+# The PROject name (i.e., the folder in which the data will be exported
+
+
+
+######################################
+# MEG LAB Parameters (don't modify) ##
+######################################
+EXPORT_FOLDER='/DATA/NFS_DATI_ORIG/VServer22/MEG/'
+# the export_folder contains a folder for each project
+
+SEARCH_FOLDER="/DATA/NFS_DATI_ORIG/VServer22/MEG/ACQ_Data"
+# the search folder contains all the data
+
+ 
+#######################
+# SCRIPT
+###################################################################
+# this line simulate an rsync and show if there are different files/folder (recursively with the -r argument)
+
+rsync -nrv --delete $SEARCH_FOLDER $EXPORT_FOLDER
+
+
+
