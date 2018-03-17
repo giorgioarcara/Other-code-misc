@@ -12,17 +12,17 @@
 # The PROject name (i.e., the folder in which the data will be exported
 
 
-IDS=("NP")
-PROJECT_FOLDERS=("NOPOSA")
+IDS=("ASP1S001")
+PROJECT_FOLDERS=("ASP1")
 
 
 ######################################
 # MEG LAB Parameters (don't modify) ##
 ######################################
-EXPORT_FOLDER='/DATA/NFS_DATI_ORIG/VServer22/MEG/'
+EXPORT_FOLDER="/storages/LDATA/Giorgio/Mounted22/"
 # the export_folder contains a folder for each project
 
-SEARCH_FOLDER="/DATA/NFS_DATI_ORIG/VServer22/MEG/ACQ_Data"
+SEARCH_FOLDER="/home/neuroimaging/Downloads/ASP1_INFO"
 # the search folder contains all the data
 
 search_id="$ID*"
@@ -46,7 +46,7 @@ PROJECT_FOLDER=${PROJECT_FOLDERS[$k]}
 File_array=()
 while IFS=  read -r -d $'\0'; do
     File_array+=("$REPLY")
-done < <(find $SEARCH_FOLDER -maxdepth 2 -name $search_id -print0)
+done < <(find $SEARCH_FOLDER -maxdepth 1 -name $search_id -print0)
 
 # to check a specific element of the created array use the code below
 # echo ${File_array[3]}
@@ -71,18 +71,28 @@ do
 # create a string with "*" to search files containing the ID
 search_id="$id*"
 # create folder if not exists
-mkdir -p "$EXPORT_FOLDER/$PROJECT_FOLDER/$id"
-mkdir -p "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/MEG_ORIG"
-mkdir -p "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/fidpics"
-mkdir -p "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/MRI_ORIG"
-mkdir -p "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/MRI_FS"
+mkdir -p "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/INFO"
 
-# loop over file names in the SEARCH_FOLDER
-for f in $(find $SEARCH_FOLDER -maxdepth 2 -name $search_id);
-# create folder
-do cp -rfi $f "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/MEG_ORIG"
-echo $f
-done #close loop over files (of an ID)
+# copy
+# loop over docs
+for doc in $(find $SEARCH_FOLDER/$id -maxdepth 1 -name "*.doc*" -or -name "*.txt");
+do
+cp -rfi $doc "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/INFO"
+echo $doc
+done #close loop over docs (of an ID)
+
+# copy fidpics (one folder)
+fidpics=$(find $SEARCH_FOLDER/$id -maxdepth 1 -name "fidpics");
+cp -rfi $fidpics "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/"
+echo $fidpics
+
+# copy posfiles
+mkdir -p "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/fidpics"
+for pos in $(find $SEARCH_FOLDER/$id -maxdepth 1 -name "*.pos*");
+do cp -rfi $pos "$EXPORT_FOLDER/$PROJECT_FOLDER/$id/fidpics"
+echo $pos
+done #close loop over fidpics (of an ID)
+
 done # close loop over ID list
 done # close loop over project folders
 

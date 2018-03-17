@@ -1,0 +1,24 @@
+#### COPY POS
+
+# script to copy recursiverly POS FILES in the MEG_ORIG folders
+# print a warning telling that in case of more than one 1 .pos only the first will be used.
+
+SEARCH_FOLDER='/Users/giorgioarcara/Desktop/PROVA'
+
+SEARCH_FILE='*.pos'
+
+# Loop over all folders (i.e., over all subjects)
+
+for subfolder in $SEARCH_FOLDER/*
+do
+   echo $subfolder
+   cd $subfolder # move to the subfolder
+   # find the posfile
+   posfile=$(find . -maxdepth 2 -name $SEARCH_FILE)
+   # loop over all subfolders of MEG_ORIG and copy the posfile.
+   for d in $subfolder/MEG_ORIG/*/
+   do
+   cp $posfile $d
+   done
+done
+   

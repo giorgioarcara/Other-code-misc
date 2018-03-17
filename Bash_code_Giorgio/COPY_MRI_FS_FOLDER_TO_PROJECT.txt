@@ -1,0 +1,54 @@
+# This script copy the segmented MRI from a source folder to the appropriate destination folder
+# based on an indices file, that is expected to be contained in the destination folder
+
+
+indices_file='indices.txt'
+
+## insert here the path with segmented MRI (one folder for each subject)
+SOURCE_FOLDER=/Users/giorgioarcara/Documents/Prove_CODE_Giorgio/Risonanze_Fake
+
+# insert here the path with the project folder
+DESTINATION_FOLDER=/Users/giorgioarcara/Documents/Prove_CODE_Giorgio/Project_Fake
+
+
+######################################
+# read all lines and store in an array
+#######################################
+index=0
+while read line; do
+  myArray[index]="$line"
+index=$(($index+1))
+done < $DESTINATION_FOLDER/$indices_file
+
+
+#######################################
+# loop over array and copy folders
+#######################################
+# loop over array and extract the pairs.
+# then copy the free surfer folder corresponding to the subject (subjxxx) to 
+# the project folder with freesurfer segmented data
+
+ 
+LIMIT=${#myArray[@]}
+for ((k=0; k < LIMIT ; k++)); do 
+
+IN=${myArray[$k]}
+
+IFS=$'\t' read -ra curr_line <<< "$IN"
+
+echo ${curr_line[0]}
+echo ${curr_line[1]}
+
+if [ -d "$SOURCE_FOLDER/${curr_line[0]}" ]; then
+
+# create MRI_FS dir (-p : only if it does not exist)
+mkdir -p $DESTINATION_FOLDER/${curr_line[1]}/MRI_FS
+
+# copy the folder to the destination 
+cp -R $SOURCE_FOLDER/${curr_line[0]}/. $DESTINATION_FOLDER/${curr_line[1]}/MRI_FS 
+
+fi 
+
+done
+
+
