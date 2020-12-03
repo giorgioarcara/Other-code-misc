@@ -2,7 +2,7 @@
 # INPUT #######
 ###############
 
-INITIAL_FOLDER="/Users/giorgioarcara/Documents/Lavori San Camillo/MEG Metaphors Oscillations/Experiment Materials/COBRAM Stimuli matching"
+INITIAL_FOLDER="/Users/giorgioarcara/Documents/Lavori San Camillo/MEG - PROSP1/PROSP1_PROSPS10015_Trig_fix"
 
 
 # CREATE FOLDER STRUCTURE
