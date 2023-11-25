@@ -9,7 +9,6 @@ References
 Goodman, A., Pepe, A., Blocker, A. W., Borgman, C. L., Cranmer, K., Crosas, M., … Slavkovic, A. (2014). Ten Simple Rules for the Care and Feeding of Scientific Data.PLoSComputational Biology, 10(4). http://doi.org/10.1371/journal.pcbi.1003542
 
 
-
 Giorgio Arcara
 
 4/10/2017
